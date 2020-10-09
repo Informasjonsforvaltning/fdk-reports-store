@@ -3,12 +3,12 @@ entries:
   fdk-reports-store:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-10-09T14:23:12.848652143+02:00"
+    created: "2020-10-09T14:32:10.940207116+02:00"
     description: Config for FDK Reports store
-    digest: 9ffc8b77318b2f4781cc4c2d3baee05ff5aaf03f32ca316e0f68e1ba43885d27
+    digest: 0045f82491f199d9d71653674c46dc07c6238d644a3ce9304b7888c0196d067b
     home: https://github.com/Informasjonsforvaltning/fdk-reports-store
     name: fdk-reports-store
     urls:
     - https://informasjonsforvaltning.github.io/fdk-reports-store/fdk-reports-store-0.1.0.tgz
     version: 0.1.0
-generated: "2020-10-09T14:23:12.848229998+02:00"
+generated: "2020-10-09T14:32:10.939866707+02:00"

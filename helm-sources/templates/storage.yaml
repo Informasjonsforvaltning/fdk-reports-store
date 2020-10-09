@@ -8,7 +8,7 @@ metadata:
   namespace: {{ required "Missing value NAMESPACE" .Values.NAMESPACE }}
 spec:
   storageClassName: ""
-  volumeName: {{ required "Missing value FDK_ES_VOLUMENAME" .Values.FDK_ES_VOLUMENAME }}{{ end }}
+  volumeName: {{ required "Missing value FDK_ES_VOLUMENAME" .Values.FDK_ES_VOLUMENAME }}
   accessModes:
   - ReadWriteOnce
   resources:
@@ -31,4 +31,3 @@ spec:
   gcePersistentDisk:
     pdName: {{ required "Missing value FDK_ES_VOLUMENAME" .Values.FDK_ES_VOLUMENAME }}
     fsType: ext4
-{{ end }}
