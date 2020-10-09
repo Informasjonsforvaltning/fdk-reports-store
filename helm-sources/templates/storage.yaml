@@ -6,7 +6,7 @@ metadata:
     fdk.service: fdk-reports-store-claim0
   name: fdk-reports-store-claim0
   namespace: {{ required "Missing value NAMESPACE" .Values.NAMESPACE }}
-spec: {{ if (.Values.FDK_TEMPDISK) and .Values.FDK_TEMPDISK "true" }}{{ else }}
+spec:
   storageClassName: ""
   volumeName: {{ required "Missing value FDK_ES_VOLUMENAME" .Values.FDK_ES_VOLUMENAME }}{{ end }}
   accessModes:
@@ -15,7 +15,7 @@ spec: {{ if (.Values.FDK_TEMPDISK) and .Values.FDK_TEMPDISK "true" }}{{ else }}
     requests:
       storage: {{ required "Missing value FDK_ES_STORAGESIZE" .Values.FDK_ES_STORAGESIZE }}
 status: {}
-{{ if (.Values.FDK_TEMPDISK) and .Values.FDK_TEMPDISK "true" }} {{ else }}
+
 ---
 kind: PersistentVolume
 apiVersion: v1
