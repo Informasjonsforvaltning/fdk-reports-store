@@ -39,7 +39,7 @@ jobs:
       - name: Create backup snapshot
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          version: '290.0.1'
+          version: '270.0.0'
           service_account_email: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY_EMAIL }}
           service_account_key: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY }}
           export_default_credentials: true
