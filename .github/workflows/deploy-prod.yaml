@@ -37,9 +37,8 @@ jobs:
           cluster_name: digdir-fdk-prod
 
       - name: Create backup snapshot
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@master
         with:
-          version: '270.0.0'
           service_account_email: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY_EMAIL }}
           service_account_key: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY }}
           export_default_credentials: true
