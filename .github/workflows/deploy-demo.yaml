@@ -3,7 +3,7 @@ name: Deploy to demo
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy-demo:
@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
       - name: Create yaml file from secret
         id: write_file
         uses: timheuer/base64-to-file@master
@@ -22,26 +20,24 @@ jobs:
 
       - name: Apply Helm template
         run: |
-          helm repo add fdk-reports-store https://informasjonsforvaltning.github.io/fdk-reports-store/
-          helm fetch --untar --untardir ./helm fdk-reports-store/fdk-reports-store
-          helm template -f ${{ steps.write_file.outputs.filePath }} ./helm/fdk-reports-store/ > ./kubectlapply.yaml
+          helm template -f ${{ steps.write_file.outputs.filePath }} ./helm-sources/ > ./kubectlapply.yaml
           chmod o+w ./kubectlapply.yaml
           cat kubectlapply.yaml
           
-      - name: Get kubeconfig file from GKE
-        uses: machine-learning-apps/gke-kubeconfig@master
+      - name: Auth gcloud CLI for deploy
+        uses: google-github-actions/auth@main
         with:
-          application_credentials: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
-          project_id: digdir-fdk-dev
-          location_zone: europe-north1-a
-          cluster_name: digdir-fdk-dev
+          credentials_json: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
 
-      - name: Deploy to demo
-        uses: docker://bitnami/kubectl:latest
-        env:
-          KUBECONFIG: '/github/workspace/.kube/config'
-        with:
-          args: "apply -f ./kubectlapply.yaml --force"
+      - name: Deploy to GCP
+        run: |
+          gcloud container clusters get-credentials digdir-fdk-dev --region europe-north1-a --project digdir-fdk-dev
+          kubectl apply -f ./kubectlapply.yaml --force
+          if ! kubectl --namespace=demo rollout status deployment fdk-reports-store; then
+          kubectl --namespace=demo rollout undo deployment fdk-reports-store
+          kubectl --namespace=demo rollout status deployment fdk-reports-store
+          exit 1
+          fi
 
       - name: Notify slack
         uses: 8398a7/action-slack@v3
