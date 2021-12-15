@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Create yaml file from secret
         id: write_file
         uses: timheuer/base64-to-file@master
