@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Create yaml file from secret
         id: write_file
@@ -28,7 +29,7 @@ jobs:
           cat kubectlapply.yaml
 
       - name: Auth gcloud CLI for deploy
-        uses: google-github-actions/auth@main
+        uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
 
