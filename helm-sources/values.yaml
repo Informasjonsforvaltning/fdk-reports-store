@@ -7,5 +7,5 @@ FDK_ES_CLUSTERNAME: elasticsearch
 FDK_ES_CLUSTERNODES: fdk-reports-store:9300
 FDK_ES_SECURITY: "false"
 FDK_ES_MEMORY: "5000Mi"
-ES7_IMAGE: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+ES7_IMAGE: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
 ES5_BUSY_IMAGE: busybox:1.34.1

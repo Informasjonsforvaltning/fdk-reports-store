@@ -29,7 +29,7 @@ jobs:
           cat kubectlapply.yaml
 
       - name: Auth gcloud CLI for backup snapshot & deploy
-        uses: google-github-actions/auth@main
+        uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY }}
 
