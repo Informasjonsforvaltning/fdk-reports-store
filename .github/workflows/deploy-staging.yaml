@@ -8,48 +8,17 @@ on:
 
 jobs:
   deploy-staging:
-    name: Deploy fdk-reports-store to staging environment when pull request is created
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Create yaml file from secret
-        id: write_file
-        uses: timheuer/base64-to-file@master
-        with:
-          fileName: 'secret.yaml'
-          encodedString: ${{ secrets.DIGDIR_FDK_REPORTS_STORE_STAGING }}
-
-      - name: Apply Helm template
-        run: |
-          helm template -f ${{ steps.write_file.outputs.filePath }} ./helm-sources/ > ./kubectlapply.yaml
-          chmod o+w ./kubectlapply.yaml
-          cat kubectlapply.yaml
-
-      - name: Auth gcloud CLI for deploy
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
-
-      - name: Deploy to GCP
-        run: |
-          gcloud container clusters get-credentials digdir-fdk-dev --region europe-north1-a --project digdir-fdk-dev
-          kubectl apply -f ./kubectlapply.yaml --force
-          if ! kubectl --namespace=staging rollout status deployment fdk-reports-store; then
-          kubectl --namespace=staging rollout undo deployment fdk-reports-store
-          kubectl --namespace=staging rollout status deployment fdk-reports-store
-          exit 1
-          fi
-
-      - name: Notify slack
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          author_name: 'Application: fdk-reports-store | Environment: staging'
-          fields: commit,author,workflow
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
+    name: Call reusable workflow when pull request is created
+    if: github.event.pull_request.draft == false
+    uses: Informasjonsforvaltning/workflows/.github/workflows/deploy.yaml@main
+    with:
+      app_name: fdk-reports-store
+      caller_sha: ${{ github.sha }}
+      repo: ${{ github.repository }}
+      actor: ${{ github.actor }}
+      environment: staging
+      cluster: digdir-fdk-dev
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DIGDIR_FDK_AUTODEPLOY: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
