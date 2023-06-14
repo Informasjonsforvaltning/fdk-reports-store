@@ -5,6 +5,7 @@ on:
     types: [ready_for_review, opened, reopened, synchronize]
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy-staging:
@@ -13,9 +14,6 @@ jobs:
     uses: Informasjonsforvaltning/workflows/.github/workflows/deploy.yaml@main
     with:
       app_name: fdk-reports-store
-      caller_sha: ${{ github.sha }}
-      repo: ${{ github.repository }}
-      actor: ${{ github.actor }}
       environment: staging
       cluster: digdir-fdk-dev
     secrets:
